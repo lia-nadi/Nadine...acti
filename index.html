@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startup Success Forecast</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+</head>
+<body>
+    <main>
+        <div class="contenedor__todo">
+            <div class="caja__trasera">
+                <div>
+                    <h3>Agregar Startup</h3>
+                    <p>Introduce los detalles de tu startup para pronosticar su éxito.</p>
+                </div>
+            </div>
+            <div class="contenedor__login-register">
+                <form class="formulario__login" id="add-startup-form">
+                    <h2>Registrar</h2>
+                    <input type="text" id="name" placeholder="Nombre">
+                    <input type="text" id="sector" placeholder="Sector">
+                    <input type="number" id="funding" placeholder="Financiamiento">
+                    <input type="number" id="team" placeholder="Tamaño del equipo">
+                    <button type="submit">Agregar</button>
+                </form>
+                <form class="formulario__register" id="forecast-form">
+                    <h2>Pronosticar</h2>
+                    <input type="text" id="forecast-name" placeholder="Nombre">
+                    <input type="text" id="forecast-sector" placeholder="Sector">
+                    <input type="number" id="forecast-funding" placeholder="Financiamiento">
+                    <input type="number" id="forecast-team" placeholder="Tamaño del equipo">
+                    <button type="submit">Pronosticar</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('add-startup-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch('/add_startup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: document.getElementById('name').value,
+                    sector: document.getElementById('sector').value,
+                    funding: document.getElementById('funding').value,
+                    team: document.getElementById('team').value,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => alert('Startup added with ID: ' + data.id))
+            .catch(error => console.error('Error:', error));
+        });
+
+        document.getElementById('forecast-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            fetch('/forecast', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: document.getElementById('forecast-name').value,
+                    sector: document.getElementById('forecast-sector').value,
+                    funding: document.getElementById('forecast-funding').value,
+                    team: document.getElementById('forecast-team').value,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => alert(data.result))
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
